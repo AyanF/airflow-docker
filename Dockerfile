@@ -19,6 +19,12 @@ USER root
 RUN apt-get update \
     	&& apt-get install -y git
 
+#install text editor sed
+RUN apt-get install -y sed
+
+#install text editor vim
+RUN apt-get install -y vim
+
 #go to base dir
 WORKDIR /
 
@@ -48,6 +54,18 @@ RUN airflow db init
 
 #create a admin user
 RUN airflow users create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
+
+
+#go to airflow dir
+WORKDIR opt/airflow
+
+RUN echo $UID
+
+#Edit airflow.cfg file
+
+RUN sed -i 's/airflow.api.auth.backend.session/airflow.api.auth.backend.basic_auth/g' airflow.cfg
+
+
 
 
 
